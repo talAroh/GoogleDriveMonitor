@@ -1,0 +1,8 @@
+requests
+typing
+pydantic
+logging
+googleapiclient
+httplib2
+oauth2client
+

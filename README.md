@@ -84,10 +84,10 @@ But I think that if this setting can be found it will require the existence of s
 local drive the default setting is restricted and it can't be changed)
 
 ## Attack Surface
-- The credentials and access tokens/api keys are stored as plaintext be default, and the can be stoled.
+- The credentials and access tokens/api keys are stored as plaintext be default, and they can be stolen.
 - It requires many Oauth client types in order to use the different types of applications. 
-- this cause for a lot of account that are hard to manage.
+  This cause for a lot of accounts that are hard to manage.
   also these accounts tokens are never expires/rotated.
-- When using the changes API, I've noticed that the resourceId in the channel object which 
+- When using the `changes` API, I've noticed that the resourceId in the channel object which 
   identifies the resource being watched on this channel Is ignored and other files can be watched too,
   Leading to a possible information leakage.

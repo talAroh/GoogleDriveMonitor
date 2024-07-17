@@ -29,7 +29,7 @@ class APIClientWrapper:
             raise Exception('Failed to create APIClientWrapper: {e}')
 
     def _create_creds(self):
-        store = file.Storage('old_storage.json')
+        store = file.Storage('storage.json')
         self.creds = store.get()
         if not self.creds or self.creds.invalid:
             self.flow = client.flow_from_clientsecrets(CREDS_FILE_PATH, SCOPES)
@@ -94,10 +94,15 @@ class APIClientWrapper:
                 activities.extend(all_activity_data.get('activities'))
                 next_page_token = all_activity_data.get('nextPageToken')
 
-            for activitiy in activities:
-                if activitiy.get('primaryActionDetail'):
-                    if activitiy.get('primaryActionDetail').get('create'):
-                        self.update_files_permissions()
+            self.last_activity_check = get_unix_time_in_ms(datetime.datetime.now())
+            if activities:
+                for activity in activities:
+                    if activity.get('primaryActionDetail'):
+                        if activity.get('primaryActionDetail').get('create'):
+                            self.update_files_permissions()
+                            break
+            else:
+                logger.info("No activities found")
         except HttpError as e:
             logger.exception(e)
             logger.error('Failed to get recent activity')

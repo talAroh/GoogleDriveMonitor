@@ -134,31 +134,19 @@ def _get_changes_start_page_token() -> str:
     return page_token_info.get('startPageToken')
 
 
-def watch_changes(web_hook_address: str, resource_id: str, resource_uri: str):
-    channel = _create_channel_object(web_hook_address, resource_id, resource_uri)
+def watch_changes(web_hook_address: str, resource_id: str, resource_uri: str = None):
+    if resource_uri:
+        channel = _create_channel_object(web_hook_address, resource_id, resource_uri)
+    else:
+        channel = _create_channel_object(web_hook_address, resource_id)
     start_page_token = _get_changes_start_page_token()
     response = _send_drive_api_request(HTTPMethod.POST, "/changes/watch",
                                        query_params={"pageToken": start_page_token},
                                        body=channel)
     if response.status_code == 200:
-        read_from_web_hook(web_hook_address)
+        logger.info('Changes watching API request succeeded')
     else:
         logger.error(f'Failed to create a changes watch')
-
-
-def read_from_web_hook(web_hook_address: str):
-    try:
-        while True:
-            if got_changes():
-                update_files_permissions()
-    except KeyboardInterrupt as e:
-        logger.info("Stopping the web hook listening")
-        return
-
-
-def got_changes() -> bool:
-    # TODO check if webhook got a message about change
-    pass
 
 
 def update_files_permissions():

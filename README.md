@@ -9,6 +9,10 @@ and the second client uses the `googleapiclient` package
 - A Google Cloud Project
 - A Google account with Google Drive enabled
 
+## Scopes
+- `https://www.googleapis.com/auth/drive`
+- `https://www.googleapis.com/auth/drive.activity`
+
 
 ## Setup
 - Enabled Google Drive API in Google Cloud
@@ -85,6 +89,8 @@ local drive the default setting is restricted and it can't be changed)
 
 ## Attack Surface
 - The credentials and access tokens/api keys are stored as plaintext be default, and they can be stolen.
+  And because Oauth is mainly used for authorization and not authentication 
+  the stolen credentials can be used by a different user
 - It requires many Oauth client types in order to use the different types of applications. 
   This cause for a lot of accounts that are hard to manage.
   also these accounts tokens are never expires/rotated.
